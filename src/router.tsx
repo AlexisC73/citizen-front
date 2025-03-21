@@ -12,7 +12,7 @@ export const createRouter = () =>
       element: <AuthLayout />,
       children: [
         {
-          path: "/auth/signin",
+          path: "/auth",
           element: <SigninPage />,
         },
         {

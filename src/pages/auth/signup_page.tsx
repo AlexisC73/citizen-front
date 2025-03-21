@@ -25,7 +25,7 @@ export default function SignupPage() {
         />
 
         <button className="btn btn-neutral mt-4">Login</button>
-        <Link to="/auth/signin" className="btn btn-link mt-4">
+        <Link to="/auth" className="btn btn-link mt-4">
           Already have an account? Sign in
         </Link>
       </fieldset>
