@@ -49,11 +49,12 @@ export default function OrganizationCardItem({
           </p>
         </div>
       </div>
-      {recruiting ? (
-        <button className="btn btn-primary w-full" disabled={hasApplied}>
-          {hasApplied ? "Already Applied" : "Ask to Join"}
-        </button>
-      ) : null}
+      <button
+        className="btn btn-primary w-full"
+        disabled={hasApplied ? false : !recruiting}
+      >
+        {hasApplied ? "Cancel Request" : recruiting ? "Ask to Join" : "Closed"}
+      </button>
     </li>
   );
 }
