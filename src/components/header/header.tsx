@@ -55,7 +55,7 @@ export default function Header({ user }: { user: User | null }) {
             </div>
           </div>
         ) : (
-          <Link className="link link-primary" to="/auth/signin">
+          <Link className="link link-primary" to="/auth">
             Se connecter / S'inscrire
           </Link>
         )}
