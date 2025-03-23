@@ -4,6 +4,7 @@ import DefaultLayout from "./layout/default_layout";
 import SigninPage from "./pages/auth/signin_page";
 import AuthLayout from "./layout/auth_layout";
 import SignupPage from "./pages/auth/signup_page";
+import OrganizationsListPage from "./pages/organizations/list";
 
 export const createRouter = () =>
   createBrowserRouter([
@@ -28,6 +29,10 @@ export const createRouter = () =>
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/organizations/list",
+          element: <OrganizationsListPage />,
         },
       ],
     },

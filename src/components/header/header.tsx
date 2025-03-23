@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import { MenuIcon } from "../../assets/icons/icons";
 import { User } from "../../context/auth/auth_context";
 
+const NAVIGATIONS: { label: string; href: string }[] = [
+  {
+    label: "My Organizations",
+    href: "/",
+  },
+];
+
 export default function Header({ user }: { user: User | null }) {
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -16,7 +23,11 @@ export default function Header({ user }: { user: User | null }) {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
             >
               <li>
-                <a>Organization</a>
+                {NAVIGATIONS.map((nav) => (
+                  <Link key={nav.label} to={nav.href}>
+                    {nav.label}
+                  </Link>
+                ))}
               </li>
             </ul>
           ) : null}
@@ -27,7 +38,11 @@ export default function Header({ user }: { user: User | null }) {
         {user ? (
           <ul className="menu menu-horizontal px-1">
             <li>
-              <a>Organization</a>
+              {NAVIGATIONS.map((nav) => (
+                <Link key={nav.label} to={nav.href}>
+                  {nav.label}
+                </Link>
+              ))}
             </li>
           </ul>
         ) : null}
