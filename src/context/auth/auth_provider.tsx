@@ -1,29 +1,47 @@
-import { useState } from "react";
-import { AuthContext, AuthCtx, User } from "./auth_context";
-
-const DEFAULT_USER = {
-  avatarUrl:
-    "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp",
-};
-
-const UNAUTHENTICATED_USER = null;
+import { useEffect, useState } from "react";
+import { AuthContext, AuthCtx, DEFAULT_USER, User } from "./auth_context";
 
 export default function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [authUser, setAuthUser] = useState<User | null>(DEFAULT_USER);
+  const [loading, setLoading] = useState(true);
+  const [authUser, setAuthUser] = useState<User | null>(null);
+
+  const handleToggleAuth = () => {
+    setAuthUser((prev) => {
+      if (!prev) {
+        localStorage.setItem("user", JSON.stringify(DEFAULT_USER));
+        return DEFAULT_USER;
+      } else {
+        localStorage.removeItem("user");
+        return null;
+      }
+    });
+  };
+
+  const verifyAuthUser = () => {
+    const user = localStorage.getItem("user");
+    if (user) {
+      setAuthUser(JSON.parse(user));
+    }
+    setLoading(false);
+  };
 
   const authCtx: AuthContext = {
     user: authUser,
+    toggleAuth: handleToggleAuth,
   };
 
-  const handleToggleAuth = () => {
-    setAuthUser((prev) =>
-      prev === UNAUTHENTICATED_USER ? DEFAULT_USER : UNAUTHENTICATED_USER,
-    );
-  };
+  useEffect(() => {
+    verifyAuthUser();
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <AuthCtx.Provider value={authCtx}>
       <button

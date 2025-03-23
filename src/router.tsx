@@ -1,16 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
 import DefaultLayout from "./layout/default_layout";
-import SigninPage from "./pages/auth/signin_page";
+import { SigninPage } from "./pages/auth/signin_page";
 import AuthLayout from "./layout/auth_layout";
-import SignupPage from "./pages/auth/signup_page";
 import OrganizationsListPage from "./pages/organizations/list";
+import { SignupPage } from "./pages/auth/signup_page";
+import { RequireGuest } from "./layout/middleware/require_guest";
+import { RequireAuth } from "./layout/middleware/require_auth";
 
 export const createRouter = () =>
   createBrowserRouter([
     {
       path: "/auth",
-      element: <AuthLayout />,
+      element: (
+        <RequireGuest>
+          <AuthLayout />
+        </RequireGuest>
+      ),
       children: [
         {
           path: "/auth",
@@ -24,7 +30,11 @@ export const createRouter = () =>
     },
     {
       path: "/",
-      element: <DefaultLayout />,
+      element: (
+        <RequireAuth>
+          <DefaultLayout />
+        </RequireAuth>
+      ),
       children: [
         {
           path: "/",
