@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getAuthAsyncThunk } from "./usecases/get-auth.usecase";
 import { signinUsecase } from "./usecases/signin.usecase";
+import { signoutUsecase } from "./usecases/signout.usecase";
 
 export type AuthUser = {
   id: string;
@@ -20,13 +21,16 @@ export const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(getAuthAsyncThunk.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
-
-    builder.addCase(signinUsecase.fulfilled, (state, action) => {
-      state.user = action.payload;
-    });
+    builder
+      .addCase(getAuthAsyncThunk.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(signinUsecase.fulfilled, (state, action) => {
+        state.user = action.payload;
+      })
+      .addCase(signoutUsecase.fulfilled, (state) => {
+        state.user = null;
+      });
   },
 });
 

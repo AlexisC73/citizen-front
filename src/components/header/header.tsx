@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { MenuIcon } from "../../assets/icons/icons";
 import { AuthUser } from "../../store/auth/auth-slice";
+import { SignoutButton } from "../../application/auth/signout/signout";
 
 const NAVIGATIONS: { label: string; href: string }[] = [
   {
@@ -53,10 +54,13 @@ export default function Header({ authenticatedUser }: HeaderProps) {
       </div>
       <div className="navbar-end">
         {authenticatedUser ? (
-          <div className="avatar">
-            <div className="w-10 rounded-full">
-              <img src={authenticatedUser.avatarUrl} />
+          <div className="flex gap-x-2">
+            <div className="avatar">
+              <div className="w-10 rounded-full">
+                <img src={authenticatedUser.avatarUrl} />
+              </div>
             </div>
+            <SignoutButton />
           </div>
         ) : (
           <Link className="link link-primary" to="/auth">

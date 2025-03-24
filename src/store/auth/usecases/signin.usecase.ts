@@ -1,17 +1,13 @@
 import { createAppAsyncThunk } from "../../create-app-thunk";
 
 export const signinUsecase = createAppAsyncThunk(
-  "auth/signup",
+  "auth/signin",
   async (params: SigninUsecaseParams, { extra: { userRepository } }) => {
-    try {
-      const result = await userRepository.signin({
-        email: params.email,
-        password: params.password,
-      });
-      return result;
-    } catch (e: any) {
-      return null;
-    }
+    const result = await userRepository.signin({
+      email: params.email,
+      password: params.password,
+    });
+    return result;
   },
 );
 

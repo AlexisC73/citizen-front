@@ -5,29 +5,31 @@ import {
 } from "../domain/repository.ts/user.repository";
 import { AuthState } from "../store/auth/auth-slice";
 
-export class InMemoryUserRepository implements UserRepository {
-  user: {
-    id: string;
-    email: string;
-    password: string;
-    citizenName: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }[] = [];
+interface ApiUser {
+  id: string;
+  email: string;
+  password: string;
+  citizenName: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class LocalStorageUserRepository implements UserRepository {
+  user: ApiUser[] = this.getExistingUsers();
 
   authenticatedAs: AuthState["user"] | null = this.getSignedUser();
 
   async signup(params: SignupParams): Promise<void> {
-    const userMap = new Map(this.user.map((u) => [u.email, u]));
-    userMap.set(params.email, {
-      id: this.genereateId(),
+    const existUser = this.user.find((u) => u.email === params.email);
+
+    this.addUser({
+      id: existUser?.id ?? this.genereateId(),
       email: params.email,
       password: params.password,
       citizenName: params.citizenName,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    this.user = Array.from(userMap.values());
   }
 
   async signin(params: SigninParams): Promise<AuthState["user"]> {
@@ -46,6 +48,11 @@ export class InMemoryUserRepository implements UserRepository {
     return this.authenticatedAs;
   }
 
+  async signout(): Promise<void> {
+    this.authenticatedAs = null;
+    localStorage.removeItem("authenticatedAs");
+  }
+
   private signinUser(id: string) {
     this.authenticatedAs = {
       id,
@@ -57,6 +64,21 @@ export class InMemoryUserRepository implements UserRepository {
       JSON.stringify(this.authenticatedAs),
     );
     return;
+  }
+
+  private addUser(user: ApiUser) {
+    const mapUser = new Map(this.user.map((u) => [u.id, u]));
+    mapUser.set(user.id, user);
+    this.user = Array.from(mapUser.values());
+    localStorage.setItem("users", JSON.stringify(this.user));
+  }
+
+  private getExistingUsers() {
+    const users = localStorage.getItem("users");
+    if (!users) {
+      return [];
+    }
+    return JSON.parse(users);
   }
 
   private getSignedUser() {

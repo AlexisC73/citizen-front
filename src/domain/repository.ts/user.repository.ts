@@ -4,6 +4,7 @@ export interface UserRepository {
   signup(params: SignupParams): Promise<void>;
   signin(params: SigninParams): Promise<AuthState["user"]>;
   getMyInfo(): Promise<AuthState["user"]>;
+  signout(): Promise<void>;
 }
 
 export type SignupParams = {
