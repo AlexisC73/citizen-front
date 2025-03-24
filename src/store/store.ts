@@ -1,10 +1,16 @@
 import { Action, configureStore, ThunkDispatch } from "@reduxjs/toolkit";
 import { rootReducer } from "./root-reducer";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { UserRepository } from "../domain/repository.ts/user.repository";
+import { InMemoryUserRepository } from "../infrastructures/in-memory-user.repository";
 
-export type Dependencies = object;
+export interface Dependencies {
+  userRepository: UserRepository;
+}
 
-const dependencies: Dependencies = {};
+const dependencies: Dependencies = {
+  userRepository: new InMemoryUserRepository(),
+};
 
 export const createStore = () => {
   const store = configureStore({
