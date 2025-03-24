@@ -1,18 +1,36 @@
 import { Link } from "react-router-dom";
-import BoySitting from "../assets/boy_sitting";
+import { NoOrganizationCard } from "../components/organization/no-organization-card/no-organization-card";
+
+const MY_ORGANIZATION = {
+  name: "My Organization",
+  description: "This is my organization",
+};
 
 export default function Home() {
   return (
     <div className="w-full flex-1 max-w-[1100px] m-auto px-4 py-8">
-      <div className="bg-gray-50 p-10 w-full rounded-xl flex items-center justify-center flex-col">
-        <h2 className="text-center text-xl font-bold">
-          You don't have any Organizations yet.
-        </h2>
-        <BoySitting className="text-[300px] py-10" />
-        <Link to="/organizations/list" className="btn btn-primary">
-          Search or Create your organization
-        </Link>
-      </div>
+      {MY_ORGANIZATION ? (
+        <>
+          <MyOrganizationCard />
+          <Link to={"/organizations/list"} className="btn btn-link">
+            Search for new Oganization
+          </Link>
+        </>
+      ) : (
+        <NoOrganizationCard />
+      )}
+    </div>
+  );
+}
+
+function MyOrganizationCard() {
+  return (
+    <div>
+      <h2>{MY_ORGANIZATION.name}</h2>
+      <p>{MY_ORGANIZATION.description}</p>
+      <Link to={`/organizations/manage`} className="btn btn-link">
+        Manage
+      </Link>
     </div>
   );
 }
