@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MenuIcon } from "../../assets/icons/icons";
-import { User } from "../../context/auth/auth_context";
+import { AuthUser } from "../../store/auth/auth-slice";
 
 const NAVIGATIONS: { label: string; href: string }[] = [
   {
@@ -9,7 +9,11 @@ const NAVIGATIONS: { label: string; href: string }[] = [
   },
 ];
 
-export default function Header({ user }: { user: User | null }) {
+export interface HeaderProps {
+  authenticatedUser: AuthUser;
+}
+
+export default function Header({ authenticatedUser }: HeaderProps) {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -17,7 +21,7 @@ export default function Header({ user }: { user: User | null }) {
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
             <MenuIcon className="text-2xl" />
           </div>
-          {user ? (
+          {authenticatedUser ? (
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
@@ -35,7 +39,7 @@ export default function Header({ user }: { user: User | null }) {
         <a className="btn btn-ghost text-xl">Star Citizen</a>
       </div>
       <div className="navbar-center hidden lg:flex">
-        {user ? (
+        {authenticatedUser ? (
           <ul className="menu menu-horizontal px-1">
             <li>
               {NAVIGATIONS.map((nav) => (
@@ -48,10 +52,10 @@ export default function Header({ user }: { user: User | null }) {
         ) : null}
       </div>
       <div className="navbar-end">
-        {user ? (
+        {authenticatedUser ? (
           <div className="avatar">
             <div className="w-10 rounded-full">
-              <img src={user.avatarUrl} />
+              <img src={authenticatedUser.avatarUrl} />
             </div>
           </div>
         ) : (
