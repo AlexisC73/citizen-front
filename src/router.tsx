@@ -7,6 +7,7 @@ import OrganizationsListPage from "./pages/organizations/list";
 import { SignupPage } from "./pages/auth/signup_page";
 import { RequireGuest } from "./layout/middleware/require_guest";
 import { RequireAuth } from "./layout/middleware/require_auth";
+import { ManageOrganizationPage } from "./pages/organizations/manage";
 
 export const createRouter = () =>
   createBrowserRouter([
@@ -43,6 +44,10 @@ export const createRouter = () =>
         {
           path: "/organizations/list",
           element: <OrganizationsListPage />,
+        },
+        {
+          path: "/organizations/manage",
+          element: <ManageOrganizationPage />,
         },
       ],
     },
