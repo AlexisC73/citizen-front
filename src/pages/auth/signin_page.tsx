@@ -1,10 +1,6 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthCtx } from "../../context/auth/auth_context";
 
 export function SigninPage() {
-  const { toggleAuth } = useContext(AuthCtx);
-
   return (
     <form className="w-full px-8 max-w-[520px]">
       <fieldset className="fieldset w-full">
@@ -28,7 +24,10 @@ export function SigninPage() {
           placeholder="Enter your password"
         />
 
-        <button onClick={toggleAuth} className="btn btn-neutral mt-4">
+        <button
+          onClick={() => console.log("should signin")}
+          className="btn btn-neutral mt-4"
+        >
           Login
         </button>
         <Link to="/auth/signup" className="btn btn-link mt-4">

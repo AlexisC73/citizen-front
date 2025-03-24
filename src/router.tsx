@@ -8,11 +8,16 @@ import { SignupPage } from "./pages/auth/signup_page";
 import { RequireGuest } from "./layout/middleware/require_guest";
 import { RequireAuth } from "./layout/middleware/require_auth";
 import { ManageOrganizationPage } from "./pages/organizations/manage";
+import { AppStore } from "./store/store";
+import { getAuthAsyncThunk } from "./store/auth/usecases/get-auth.usecase";
 
-export const createRouter = () =>
+export const createRouter = ({ store }: { store: AppStore }) =>
   createBrowserRouter([
     {
       path: "/auth",
+      loader: async () => {
+        await store.dispatch(getAuthAsyncThunk());
+      },
       element: (
         <RequireGuest>
           <AuthLayout />
@@ -31,6 +36,9 @@ export const createRouter = () =>
     },
     {
       path: "/",
+      loader: async () => {
+        await store.dispatch(getAuthAsyncThunk());
+      },
       element: (
         <RequireAuth>
           <DefaultLayout />

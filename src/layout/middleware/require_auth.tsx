@@ -1,10 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { AuthCtx } from "../../context/auth/auth_context";
+import { useAppSelector } from "../../store/store";
+import { selectAuth } from "../../store/auth/auth-slice";
 
 export function RequireAuth({ children }: { children?: React.ReactNode }) {
   const navigate = useNavigate();
-  const { user } = useContext(AuthCtx);
+  const { user } = useAppSelector(selectAuth);
 
   useEffect(() => {
     if (!user) {
