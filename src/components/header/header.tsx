@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { MenuIcon } from "../../assets/icons/icons";
 import { AuthUser } from "../../store/auth/auth-slice";
-import { SignoutButton } from "../../application/auth/signout/signout";
 
 const NAVIGATIONS: { label: string; href: string }[] = [
   {
@@ -12,9 +11,13 @@ const NAVIGATIONS: { label: string; href: string }[] = [
 
 export interface HeaderProps {
   authenticatedUser: AuthUser;
+  performSignout: () => void;
 }
 
-export default function Header({ authenticatedUser }: HeaderProps) {
+export default function Header({
+  authenticatedUser,
+  performSignout,
+}: HeaderProps) {
   return (
     <div className="navbar bg-base-100 shadow-sm">
       <div className="navbar-start">
@@ -60,7 +63,9 @@ export default function Header({ authenticatedUser }: HeaderProps) {
                 <img src={authenticatedUser.avatarUrl} />
               </div>
             </div>
-            <SignoutButton />
+            <button onClick={performSignout} className="btn btn-ghost">
+              Signout
+            </button>
           </div>
         ) : (
           <Link className="link link-primary" to="/auth">
