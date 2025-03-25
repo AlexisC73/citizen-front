@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom";
 import { NoOrganizationCard } from "../components/organization/no-organization-card/no-organization-card";
 import { useAppSelector } from "../store/store";
-import { selectOrganizations } from "../store/organization/organization.slice";
-import { selectAuth } from "../store/auth/auth-slice";
+import { selectHomeViewModel } from "./home.viewmodel";
 
 export default function Home() {
-  const { user } = useAppSelector(selectAuth);
-  const myOrganizations = useAppSelector(selectOrganizations);
-  console.log(myOrganizations);
-  const ownOrganization = myOrganizations.find((o) => o.owner === user!.id);
+  const { ownOrganization } = useAppSelector(selectHomeViewModel);
 
   return (
     <div className="w-full flex-1 max-w-[1100px] m-auto px-4 py-8">

@@ -28,14 +28,21 @@ export const selectOrganizations = (state: RootState) =>
   organizationEntity.getSelectors().selectAll(state.organizations);
 
 export const selectMyOrganizations = createSelector(
-  [
-    (state: RootState) => selectOrganizations(state),
-    (state: RootState) => state.auth.user?.id,
-  ],
+  [selectOrganizations, (state: RootState) => state.auth.user?.id],
   (orgs, userId) => {
     if (!userId) {
       return [];
     }
     return orgs.filter((o) => o.members.includes({ id: userId }));
+  },
+);
+
+export const selectOwnOrganization = createSelector(
+  [selectOrganizations, (state: RootState) => state.auth.user?.id],
+  (orgs, userId) => {
+    if (!userId) {
+      return undefined;
+    }
+    return orgs.find((o) => o.owner === userId) ?? undefined;
   },
 );
