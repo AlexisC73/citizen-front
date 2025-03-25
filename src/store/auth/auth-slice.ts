@@ -2,11 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getAuthAsyncThunk } from "./usecases/get-auth.usecase";
 import { signinUsecase } from "./usecases/signin.usecase";
 import { signoutUsecase } from "./usecases/signout.usecase";
-
-export type AuthUser = {
-  id: string;
-  avatarUrl: string;
-} | null;
+import { AuthUser } from "./model";
 
 export interface AuthState {
   user: AuthUser;

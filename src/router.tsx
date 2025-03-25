@@ -10,6 +10,7 @@ import { RequireAuth } from "./layout/middleware/require_auth";
 import { ManageOrganizationPage } from "./pages/organizations/manage";
 import { AppStore } from "./store/store";
 import { getAuthAsyncThunk } from "./store/auth/usecases/get-auth.usecase";
+import { getMyOrganizationsUsecase } from "./store/organization/usecases/get-organizations.usecase";
 
 export const createRouter = ({ store }: { store: AppStore }) =>
   createBrowserRouter([
@@ -47,6 +48,9 @@ export const createRouter = ({ store }: { store: AppStore }) =>
       children: [
         {
           path: "/",
+          loader: async () => {
+            await store.dispatch(getMyOrganizationsUsecase());
+          },
           element: <Home />,
         },
         {

@@ -3,13 +3,17 @@ import { rootReducer } from "./root-reducer";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { UserRepository } from "../domain/repository.ts/user.repository";
 import { LocalStorageUserRepository } from "../infrastructures/local-storage-user.repository";
+import { OrganizationRepository } from "../domain/repository.ts/organization.repository";
+import { LocalStorageOrganizationRepository } from "../infrastructures/local-storage-organization.repository";
 
 export interface Dependencies {
   userRepository: UserRepository;
+  organizationRepository: OrganizationRepository;
 }
 
 const dependencies: Dependencies = {
   userRepository: new LocalStorageUserRepository(),
+  organizationRepository: new LocalStorageOrganizationRepository(),
 };
 
 export const createStore = () => {

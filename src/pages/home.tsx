@@ -1,17 +1,20 @@
 import { Link } from "react-router-dom";
 import { NoOrganizationCard } from "../components/organization/no-organization-card/no-organization-card";
-
-const MY_ORGANIZATION = {
-  name: "My Organization",
-  description: "This is my organization",
-};
+import { useAppSelector } from "../store/store";
+import { selectOrganizations } from "../store/organization/organization.slice";
+import { selectAuth } from "../store/auth/auth-slice";
 
 export default function Home() {
+  const { user } = useAppSelector(selectAuth);
+  const myOrganizations = useAppSelector(selectOrganizations);
+  console.log(myOrganizations);
+  const ownOrganization = myOrganizations.find((o) => o.owner === user!.id);
+
   return (
     <div className="w-full flex-1 max-w-[1100px] m-auto px-4 py-8">
-      {MY_ORGANIZATION ? (
+      {ownOrganization ? (
         <>
-          <MyOrganizationCard />
+          <MyOrganizationCard organization={{ name: ownOrganization.name }} />
           <Link to={"/organizations/list"} className="btn btn-link">
             Search for new Oganization
           </Link>
@@ -23,11 +26,14 @@ export default function Home() {
   );
 }
 
-function MyOrganizationCard() {
+function MyOrganizationCard({
+  organization,
+}: {
+  organization: { name: string };
+}) {
   return (
     <div>
-      <h2>{MY_ORGANIZATION.name}</h2>
-      <p>{MY_ORGANIZATION.description}</p>
+      <h2>{organization.name}</h2>
       <Link to={`/organizations/manage`} className="btn btn-link">
         Manage
       </Link>
