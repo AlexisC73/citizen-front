@@ -15,12 +15,12 @@ interface ApiUser {
 }
 
 export class LocalStorageUserRepository implements UserRepository {
-  user: ApiUser[] = this.getExistingUsers();
+  users: ApiUser[] = this.getExistingUsers();
 
   authenticatedAs: AuthState["user"] | null = this.getSignedUser();
 
   async signup(params: SignupParams): Promise<void> {
-    const existUser = this.user.find((u) => u.email === params.email);
+    const existUser = this.users.find((u) => u.email === params.email);
 
     this.addUser({
       id: existUser?.id ?? this.genereateId(),
@@ -33,7 +33,7 @@ export class LocalStorageUserRepository implements UserRepository {
   }
 
   async signin(params: SigninParams): Promise<AuthState["user"]> {
-    const user = this.user.find((u) => u.email === params.email);
+    const user = this.users.find((u) => u.email === params.email);
     if (!user || user.password !== params.password) {
       throw new Error("User not found");
     }
@@ -54,10 +54,15 @@ export class LocalStorageUserRepository implements UserRepository {
   }
 
   private signinUser(id: string) {
+    const user = this.users.find((u) => u.id === id);
+    if (!user) {
+      throw new Error("User not found");
+    }
     this.authenticatedAs = {
       id,
       avatarUrl:
         "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp",
+      citizenName: user.citizenName,
     };
     localStorage.setItem(
       "authenticatedAs",
@@ -67,10 +72,10 @@ export class LocalStorageUserRepository implements UserRepository {
   }
 
   private addUser(user: ApiUser) {
-    const mapUser = new Map(this.user.map((u) => [u.id, u]));
+    const mapUser = new Map(this.users.map((u) => [u.id, u]));
     mapUser.set(user.id, user);
-    this.user = Array.from(mapUser.values());
-    localStorage.setItem("users", JSON.stringify(this.user));
+    this.users = Array.from(mapUser.values());
+    localStorage.setItem("users", JSON.stringify(this.users));
   }
 
   private getExistingUsers() {

@@ -6,12 +6,17 @@ export const createJoinOrganizationRequest = createAppAsyncThunk(
     params: CreateJoinOrganizationRequestPayload,
     { getState, extra: { organizationRepository } },
   ) => {
-    const userId = getState().auth.user!.id;
+    const user = getState().auth.user!;
     const { id } = await organizationRepository.createJoinRequest({
       organizationId: params.organizationId,
     });
 
-    return { id, organizationId: params.organizationId, userId };
+    return {
+      id,
+      organizationId: params.organizationId,
+      userId: user.id,
+      citizenName: user.citizenName,
+    };
   },
 );
 

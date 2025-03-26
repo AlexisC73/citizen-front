@@ -76,6 +76,7 @@ export class LocalStorageOrganizationRepository
   }
 
   private addRequestToOrganization(organizationId: string, userId: string) {
+    const authUser = this.getAuthUser()!;
     const fundRequest = this.joinRequest.find(
       (r) => r.userId === userId && r.organizationId === organizationId,
     );
@@ -86,7 +87,13 @@ export class LocalStorageOrganizationRepository
     const id = crypto.randomUUID();
     const newRequests = [
       ...this.joinRequest,
-      { id, userId, organizationId, citizenName: "Test", askDate: Date.now() },
+      {
+        id,
+        userId,
+        organizationId,
+        citizenName: authUser.citizenName,
+        askDate: Date.now(),
+      },
     ];
     this.setJoinRequests(newRequests);
     return { id };

@@ -17,7 +17,7 @@ export const joinOrganizationRequest = createSlice({
           id: action.payload.id,
           organizationId: action.payload.organizationId,
           userId: action.payload.userId,
-          citizenName: "Test",
+          citizenName: action.payload.citizenName,
           askDate: Date.now(),
         });
       })
