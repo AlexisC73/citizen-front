@@ -1,7 +1,4 @@
-import {
-  selectNotMemberOrganizations,
-  selectOwnOrganization,
-} from "../../../store/organization/organization.slice";
+import { selectOrganizations } from "../../../store/organization/organization.slice";
 import { OrganizationsListProps } from "./list";
 import { RootState } from "../../../store/store";
 
@@ -40,8 +37,15 @@ export const getOrganizationsListPageViewModel = (
   hasOwnOrganization: boolean;
   organizations: OrganizationsReturnTypes;
 } => {
-  const myOrganizations = selectOwnOrganization(state);
-  const notMemberOrganizations = selectNotMemberOrganizations(state);
+  const organizations = selectOrganizations(state);
+
+  const myOrganizations = organizations.filter((o) =>
+    o.members.some((m) => m.id === state.auth.user?.id),
+  );
+
+  const notMemberOrganizations = organizations.filter((o) =>
+    o.members.every((m) => m.id !== state.auth.user?.id),
+  );
 
   if (notMemberOrganizations.length === 0) {
     return {

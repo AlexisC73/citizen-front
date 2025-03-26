@@ -30,6 +30,8 @@ export const createStore = () => {
   return store;
 };
 
+export const store = createStore();
+
 export type AppStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = ThunkDispatch<RootState, Dependencies, Action>;

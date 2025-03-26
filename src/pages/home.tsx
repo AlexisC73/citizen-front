@@ -1,16 +1,16 @@
 import { Link } from "react-router-dom";
 import { NoOrganizationCard } from "../components/organization/no-organization-card/no-organization-card";
-import { useAppSelector } from "../store/store";
-import { selectHomeViewModel } from "./home.viewmodel";
+import { getHomeViewModel } from "./home.viewmodel";
+import { store } from "../store/store";
 
 export default function Home() {
-  const { ownOrganization } = useAppSelector(selectHomeViewModel);
+  const { ownedOrganization } = getHomeViewModel(store.getState());
 
   return (
     <div className="w-full flex-1 max-w-[1100px] m-auto px-4 py-8">
-      {ownOrganization ? (
+      {ownedOrganization ? (
         <>
-          <MyOrganizationCard organization={{ name: ownOrganization.name }} />
+          <MyOrganizationCard organization={{ name: ownedOrganization.name }} />
           <Link to={"/organizations/list"} className="btn btn-link">
             Search for new Oganization
           </Link>

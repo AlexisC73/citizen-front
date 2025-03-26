@@ -4,9 +4,7 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { createRouter } from "./router.tsx";
 import { Provider } from "react-redux";
-import { createStore } from "./store/store.ts";
-
-const store = createStore();
+import { store } from "./store/store.ts";
 
 const router = createRouter({ store });
 

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import OrganizationCardItem from "../../../components/organization/card-item/card-item";
 import { CreateOrganizationForm } from "../../../components/organization/create-organization-form/create-organization-form";
 import { createOrganizationUsecase } from "../../../store/organization/usecases/create.usecase";
-import { useAppDispatch, useAppSelector } from "../../../store/store";
+import { store, useAppDispatch } from "../../../store/store";
 import {
   getOrganizationsListPageViewModel,
   ListViewModelStatus,
@@ -13,7 +13,7 @@ export default function OrganizationsListPage() {
   const navigate = useNavigate();
 
   const { hasOwnOrganization, organizations } =
-    getOrganizationsListPageViewModel(useAppSelector((state) => state));
+    getOrganizationsListPageViewModel(store.getState());
 
   const OrganizationView = () => {
     switch (organizations.status) {
