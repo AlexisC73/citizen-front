@@ -10,7 +10,12 @@ export default function Home() {
     <div className="w-full flex-1 max-w-[1100px] m-auto px-4 py-8">
       {ownedOrganization ? (
         <>
-          <MyOrganizationCard organization={{ name: ownedOrganization.name }} />
+          <MyOrganizationCard
+            organization={{
+              name: ownedOrganization.name,
+              members: ownedOrganization.members.length,
+            }}
+          />
           <Link to={"/organizations/list"} className="btn btn-link">
             Join a new Oganization
           </Link>
@@ -25,11 +30,14 @@ export default function Home() {
 function MyOrganizationCard({
   organization,
 }: {
-  organization: { name: string };
+  organization: { name: string; members: number };
 }) {
   return (
     <div>
-      <h2>{organization.name}</h2>
+      <h2>
+        {organization.name}{" "}
+        <span className="text-sm">({organization.members} membres)</span>
+      </h2>
       <Link to={`/organizations/manage`} className="btn btn-link">
         Manage
       </Link>
