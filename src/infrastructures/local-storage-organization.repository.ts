@@ -1,4 +1,5 @@
 import {
+  CreateJoinOrganizationRequestParams,
   CreateOrganizationParams,
   OrganizationRepository,
 } from "../domain/repository.ts/organization.repository";
@@ -13,10 +14,17 @@ export interface OrganizationApi {
   recruiting: boolean;
 }
 
+export interface JoinOrganizationRequestApi {
+  id: string;
+  userId: string;
+  organizationId: string;
+}
+
 export class LocalStorageOrganizationRepository
   implements OrganizationRepository
 {
   organizations: OrganizationApi[] = this.getLocalOrganizations() ?? [];
+  joinRequest: JoinOrganizationRequestApi[] = this.getLocalJoinRequests() ?? [];
 
   async create(params: CreateOrganizationParams): Promise<void> {
     this.addOrganization({ id: crypto.randomUUID(), name: params.name });
@@ -31,6 +39,28 @@ export class LocalStorageOrganizationRepository
 
   async getOrganizations(): Promise<OrganizationApi[]> {
     return this.organizations;
+  }
+
+  async createJoinRequest({
+    organizationId,
+  }: CreateJoinOrganizationRequestParams): Promise<{ id: string }> {
+    const user = this.getAuthUser()!;
+    const { id } = this.addRequestToOrganization(organizationId, user.id);
+    return { id };
+  }
+
+  private addRequestToOrganization(organizationId: string, userId: string) {
+    const fundRequest = this.joinRequest.find(
+      (r) => r.userId === userId && r.organizationId === organizationId,
+    );
+
+    if (fundRequest) {
+      return { id: fundRequest.id };
+    }
+    const id = crypto.randomUUID();
+    const newRequests = [...this.joinRequest, { id, userId, organizationId }];
+    this.setJoinRequests(newRequests);
+    return { id };
   }
 
   private addOrganization(organization: { id: string; name: string }) {
@@ -57,8 +87,17 @@ export class LocalStorageOrganizationRepository
     localStorage.setItem("organizations", JSON.stringify(organizations));
   }
 
+  private setJoinRequests(requests: JoinOrganizationRequestApi[]) {
+    this.joinRequest = requests;
+    localStorage.setItem("joinRequest", JSON.stringify(requests));
+  }
+
   private getLocalOrganizations() {
     return JSON.parse(localStorage.getItem("organizations")!);
+  }
+
+  private getLocalJoinRequests() {
+    return JSON.parse(localStorage.getItem("joinRequest")!);
   }
 
   private getAuthUser() {

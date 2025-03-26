@@ -1,6 +1,8 @@
 import { selectOrganizations } from "../../../store/organization/organization.slice";
 import { OrganizationsListProps } from "./list";
 import { RootState } from "../../../store/store";
+import { JoinOrganizationRequest } from "../../../store/join-organization-request/model";
+import { selectJoinOrganizationRequest } from "../../../store/join-organization-request/join-request.slice";
 
 const MONTHS = [
   "Jan",
@@ -35,9 +37,11 @@ export const getOrganizationsListPageViewModel = (
   state: RootState,
 ): {
   hasOwnOrganization: boolean;
+  joinRequest: JoinOrganizationRequest[];
   organizations: OrganizationsReturnTypes;
 } => {
   const organizations = selectOrganizations(state);
+  const joinOrganizationRequest = selectJoinOrganizationRequest(state);
 
   const myOrganizations = organizations.filter((o) =>
     o.members.some((m) => m.id === state.auth.user?.id),
@@ -50,6 +54,7 @@ export const getOrganizationsListPageViewModel = (
   if (notMemberOrganizations.length === 0) {
     return {
       hasOwnOrganization: myOrganizations ? true : false,
+      joinRequest: joinOrganizationRequest,
       organizations: {
         status: ListViewModelStatus.EMPTY_ORGANIZATIONS,
       },
@@ -57,6 +62,7 @@ export const getOrganizationsListPageViewModel = (
   }
   return {
     hasOwnOrganization: myOrganizations ? true : false,
+    joinRequest: joinOrganizationRequest,
     organizations: {
       status: ListViewModelStatus.FUND_ORGANIZATIONS,
       data: notMemberOrganizations.map((o) => {
@@ -66,6 +72,10 @@ export const getOrganizationsListPageViewModel = (
           name: o.name,
           members: o.members.length,
           recruiting: o.recruiting,
+          hasApplied: joinOrganizationRequest.some(
+            (j) =>
+              j.organizationId === o.id && j.userId === state.auth.user!.id,
+          ),
           createdAt: `${MONTHS[createdAt.getMonth()]} ${createdAt.getFullYear()}`,
         };
       }),

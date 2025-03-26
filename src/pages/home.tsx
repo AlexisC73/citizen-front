@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { NoOrganizationCard } from "../components/organization/no-organization-card/no-organization-card";
 import { getHomeViewModel } from "./home.viewmodel";
-import { store } from "../store/store";
+import { useAppSelector } from "../store/store";
 
 export default function Home() {
-  const { ownedOrganization } = getHomeViewModel(store.getState());
+  const { ownedOrganization } = useAppSelector(getHomeViewModel);
 
   return (
     <div className="w-full flex-1 max-w-[1100px] m-auto px-4 py-8">

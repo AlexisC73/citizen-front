@@ -2,25 +2,36 @@ import { useNavigate } from "react-router-dom";
 import OrganizationCardItem from "../../../components/organization/card-item/card-item";
 import { CreateOrganizationForm } from "../../../components/organization/create-organization-form/create-organization-form";
 import { createOrganizationUsecase } from "../../../store/organization/usecases/create.usecase";
-import { store, useAppDispatch } from "../../../store/store";
+import { useAppDispatch, useAppSelector } from "../../../store/store";
 import {
   getOrganizationsListPageViewModel,
   ListViewModelStatus,
 } from "./list.viewmodel";
+import { createJoinOrganizationRequest } from "../../../store/join-organization-request/usecase/create-request";
 
 export default function OrganizationsListPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { hasOwnOrganization, organizations } =
-    getOrganizationsListPageViewModel(store.getState());
+  const handleCreateJoinOrgRequest = async (organizationId: string) => {
+    await dispatch(createJoinOrganizationRequest({ organizationId }));
+  };
+
+  const { hasOwnOrganization, organizations } = useAppSelector(
+    getOrganizationsListPageViewModel,
+  );
 
   const ModelView = () => {
     switch (organizations.status) {
       case ListViewModelStatus.EMPTY_ORGANIZATIONS:
         return <p>No organizations found</p>;
       case ListViewModelStatus.FUND_ORGANIZATIONS:
-        return <OrganizationsList organizations={organizations.data} />;
+        return (
+          <OrganizationsList
+            createJoinRequest={handleCreateJoinOrgRequest}
+            organizations={organizations.data}
+          />
+        );
       default:
         return null;
     }
@@ -50,11 +61,16 @@ export interface OrganizationsListProps {
     name: string;
     members: number;
     recruiting: boolean;
+    hasApplied: boolean;
     createdAt: string;
   }[];
+  createJoinRequest: (organizationId: string) => Promise<void>;
 }
 
-function OrganizationsList({ organizations }: OrganizationsListProps) {
+function OrganizationsList({
+  organizations,
+  createJoinRequest,
+}: OrganizationsListProps) {
   return (
     <ul className="mt-4 md:grid md:grid-cols-2 gap-4">
       {organizations.map((o) => (
@@ -65,7 +81,8 @@ function OrganizationsList({ organizations }: OrganizationsListProps) {
           members={o.members}
           recruiting={o.recruiting}
           createdAt={o.createdAt}
-          hasApplied={false}
+          hasApplied={o.hasApplied}
+          onJoin={() => createJoinRequest(o.id)}
         />
       ))}
     </ul>
