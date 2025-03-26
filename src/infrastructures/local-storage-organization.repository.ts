@@ -69,6 +69,12 @@ export class LocalStorageOrganizationRepository
     return this.joinRequest.filter((r) => r.userId === user.id);
   }
 
+  async getMyOrganizationJoinRequests(): Promise<JoinOrganizationRequestApi[]> {
+    const user = this.getAuthUser()!;
+    const myOrg = this.organizations.find((o) => o.owner === user.id);
+    return this.joinRequest.filter((r) => r.organizationId === myOrg?.id);
+  }
+
   private addRequestToOrganization(organizationId: string, userId: string) {
     const fundRequest = this.joinRequest.find(
       (r) => r.userId === userId && r.organizationId === organizationId,

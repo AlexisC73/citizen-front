@@ -44,6 +44,8 @@ export const manageViewModel = (state: RootState): { requests: Request } => {
     (org) => org.owner === userId,
   );
 
+  console.log(myOrganization);
+
   if (!myOrganization) {
     return {
       requests: {
@@ -52,10 +54,13 @@ export const manageViewModel = (state: RootState): { requests: Request } => {
       },
     };
   }
+  console.log(1);
 
   const ownOrganizationRequests = joinRequest.filter(
     (req) => req.organizationId === myOrganization.id,
   );
+
+  console.log("REQUEST", ownOrganizationRequests);
 
   return {
     requests: {

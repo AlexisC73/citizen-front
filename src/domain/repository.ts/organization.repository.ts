@@ -14,6 +14,7 @@ export interface OrganizationRepository {
     joinRequestId,
   }: CancelJoinOrganizationRequestParams): Promise<void>;
   getMyJoinRequests(): Promise<JoinOrganizationRequestApi[]>;
+  getMyOrganizationJoinRequests(): Promise<JoinOrganizationRequestApi[]>;
 }
 
 export interface CreateOrganizationParams {

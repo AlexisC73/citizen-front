@@ -13,6 +13,7 @@ import { getAuthAsyncThunk } from "./store/auth/usecases/get-auth.usecase";
 import { getMyOrganizationsUsecase } from "./store/organization/usecases/get-my-organizations.usecase";
 import { getOrganizationsUsecase } from "./store/organization/usecases/get-organizations.usecase";
 import { getOwnJoinRequests } from "./store/join-organization-request/usecase/get-own-join-request.usecase";
+import { getOwnOrganizationJoinRequest } from "./store/join-organization-request/usecase/get-orwn-organization-join-request.usecase";
 
 export const createRouter = ({ store }: { store: AppStore }) =>
   createBrowserRouter([
@@ -41,6 +42,10 @@ export const createRouter = ({ store }: { store: AppStore }) =>
       path: "/",
       loader: async () => {
         await store.dispatch(getAuthAsyncThunk());
+        if (store.getState().auth.user) {
+          await store.dispatch(getMyOrganizationsUsecase());
+          await store.dispatch(getOwnJoinRequests());
+        }
       },
       element: (
         <RequireAuth>
@@ -59,12 +64,14 @@ export const createRouter = ({ store }: { store: AppStore }) =>
           path: "/organizations/list",
           loader: async () => {
             await store.dispatch(getOrganizationsUsecase());
-            await store.dispatch(getOwnJoinRequests());
           },
           element: <OrganizationsListPage />,
         },
         {
           path: "/organizations/manage",
+          loader: async () => {
+            await store.dispatch(getOwnOrganizationJoinRequest());
+          },
           element: <ManageOrganizationPage />,
         },
       ],
