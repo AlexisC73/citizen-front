@@ -7,7 +7,7 @@ import OrganizationsListPage from "./pages/organizations/list/list";
 import { SignupPage } from "./pages/auth/signup_page";
 import { RequireGuest } from "./layout/middleware/require_guest";
 import { RequireAuth } from "./layout/middleware/require_auth";
-import { ManageOrganizationPage } from "./pages/organizations/manage";
+import { ManageOrganizationPage } from "./pages/organizations/manage/manage";
 import { AppStore } from "./store/store";
 import { getAuthAsyncThunk } from "./store/auth/usecases/get-auth.usecase";
 import { getMyOrganizationsUsecase } from "./store/organization/usecases/get-my-organizations.usecase";

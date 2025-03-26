@@ -19,6 +19,8 @@ export interface JoinOrganizationRequestApi {
   id: string;
   userId: string;
   organizationId: string;
+  citizenName: string;
+  askDate: number;
 }
 
 export class LocalStorageOrganizationRepository
@@ -76,7 +78,10 @@ export class LocalStorageOrganizationRepository
       return { id: fundRequest.id };
     }
     const id = crypto.randomUUID();
-    const newRequests = [...this.joinRequest, { id, userId, organizationId }];
+    const newRequests = [
+      ...this.joinRequest,
+      { id, userId, organizationId, citizenName: "Test", askDate: Date.now() },
+    ];
     this.setJoinRequests(newRequests);
     return { id };
   }
