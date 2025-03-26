@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import OrganizationCardItem from "../../../components/organization/card-item/card-item";
+import OrganizationCardItem, {
+  OrganizationCardItemProps,
+} from "../../../components/organization/card-item/card-item";
 import { CreateOrganizationForm } from "../../../components/organization/create-organization-form/create-organization-form";
 import { createOrganizationUsecase } from "../../../store/organization/usecases/create.usecase";
 import { useAppDispatch, useAppSelector } from "../../../store/store";
@@ -56,33 +58,23 @@ export default function OrganizationsListPage() {
 }
 
 export interface OrganizationsListProps {
-  organizations: {
-    id: string;
-    name: string;
-    members: number;
-    recruiting: boolean;
-    hasApplied: boolean;
-    createdAt: string;
-  }[];
+  organizations: OrganizationCardItemProps[];
   createJoinRequest: (organizationId: string) => Promise<void>;
 }
 
-function OrganizationsList({
-  organizations,
-  createJoinRequest,
-}: OrganizationsListProps) {
+function OrganizationsList({ organizations }: OrganizationsListProps) {
   return (
     <ul className="mt-4 md:grid md:grid-cols-2 gap-4">
       {organizations.map((o) => (
         <OrganizationCardItem
-          key={o.id}
-          organizationId={o.id}
+          key={o.organizationId}
+          organizationId={o.organizationId}
           name={o.name}
           members={o.members}
           recruiting={o.recruiting}
           createdAt={o.createdAt}
           hasApplied={o.hasApplied}
-          onJoin={() => createJoinRequest(o.id)}
+          onClickAction={o.onClickAction}
         />
       ))}
     </ul>

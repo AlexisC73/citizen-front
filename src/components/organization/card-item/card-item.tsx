@@ -5,7 +5,7 @@ export interface OrganizationCardItemProps {
   createdAt: string;
   hasApplied: boolean;
   recruiting: boolean;
-  onJoin: () => Promise<void>;
+  onClickAction: () => void;
 }
 
 export default function OrganizationCardItem({
@@ -14,7 +14,7 @@ export default function OrganizationCardItem({
   createdAt,
   hasApplied,
   recruiting,
-  onJoin,
+  onClickAction,
 }: OrganizationCardItemProps) {
   return (
     <li className="shadow-xl p-4 rounded-xl flex flex-col gap-y-2">
@@ -53,7 +53,7 @@ export default function OrganizationCardItem({
       </div>
       <button
         className="btn btn-primary w-full"
-        onClick={hasApplied ? undefined : recruiting ? onJoin : undefined}
+        onClick={onClickAction}
         disabled={hasApplied ? false : !recruiting}
       >
         {hasApplied ? "Cancel Request" : recruiting ? "Ask to Join" : "Closed"}

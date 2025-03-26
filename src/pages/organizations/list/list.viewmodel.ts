@@ -1,8 +1,9 @@
 import { selectOrganizations } from "../../../store/organization/organization.slice";
 import { OrganizationsListProps } from "./list";
-import { RootState } from "../../../store/store";
+import { RootState, store } from "../../../store/store";
 import { JoinOrganizationRequest } from "../../../store/join-organization-request/model";
 import { selectJoinOrganizationRequest } from "../../../store/join-organization-request/join-request.slice";
+import { createJoinOrganizationRequest } from "../../../store/join-organization-request/usecase/create-request";
 
 const MONTHS = [
   "Jan",
@@ -43,6 +44,14 @@ export const getOrganizationsListPageViewModel = (
   const organizations = selectOrganizations(state);
   const joinOrganizationRequest = selectJoinOrganizationRequest(state);
 
+  const handleCreateJoinRequest = async (organizationId: string) => {
+    store.dispatch(createJoinOrganizationRequest({ organizationId }));
+  };
+
+  const handleCancelJoinRequest = async (organizationId: string) => {
+    console.log("should cancel join request", organizationId);
+  };
+
   const myOrganizations = organizations.filter((o) =>
     o.members.some((m) => m.id === state.auth.user?.id),
   );
@@ -67,16 +76,21 @@ export const getOrganizationsListPageViewModel = (
       status: ListViewModelStatus.FUND_ORGANIZATIONS,
       data: notMemberOrganizations.map((o) => {
         const createdAt = new Date(o.createdAt);
+        const hasApplied = joinOrganizationRequest.some(
+          (j) => j.organizationId === o.id && j.userId === state.auth.user!.id,
+        );
         return {
-          id: o.id,
+          organizationId: o.id,
           name: o.name,
           members: o.members.length,
           recruiting: o.recruiting,
-          hasApplied: joinOrganizationRequest.some(
-            (j) =>
-              j.organizationId === o.id && j.userId === state.auth.user!.id,
-          ),
+          hasApplied,
           createdAt: `${MONTHS[createdAt.getMonth()]} ${createdAt.getFullYear()}`,
+          onClickAction: hasApplied
+            ? () => handleCancelJoinRequest(o.id)
+            : o.recruiting
+              ? () => handleCreateJoinRequest(o.id)
+              : () => console.log("Team is not recruiting"),
         };
       }),
     },
