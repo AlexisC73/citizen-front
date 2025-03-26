@@ -2,8 +2,9 @@ export type Organization = {
   id: string;
   name: string;
   owner: string;
-  createdAt: string;
+  createdAt: number;
   members: Members[];
+  recruiting: boolean;
 };
 
 export type Members = {

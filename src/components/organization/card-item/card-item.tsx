@@ -2,7 +2,7 @@ export interface OrganizationCardItemProps {
   organizationId: string;
   name: string;
   members: number;
-  createdAt: { day: string; month: string; year: string };
+  createdAt: string;
   hasApplied: boolean;
   recruiting: boolean;
 }
@@ -20,7 +20,7 @@ export default function OrganizationCardItem({
         <h2 className="text-lg font-bold flex justify-between items-center">
           {name}
           <span className="text-gray-400 text-sm font-normal">
-            Created: {createdAt.month} {createdAt.year}
+            Created: {createdAt}
           </span>
         </h2>
       </div>

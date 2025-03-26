@@ -3,14 +3,15 @@ import Home from "./pages/home";
 import DefaultLayout from "./layout/default_layout";
 import { SigninPage } from "./pages/auth/signin_page";
 import AuthLayout from "./layout/auth_layout";
-import OrganizationsListPage from "./pages/organizations/list";
+import OrganizationsListPage from "./pages/organizations/list/list";
 import { SignupPage } from "./pages/auth/signup_page";
 import { RequireGuest } from "./layout/middleware/require_guest";
 import { RequireAuth } from "./layout/middleware/require_auth";
 import { ManageOrganizationPage } from "./pages/organizations/manage";
 import { AppStore } from "./store/store";
 import { getAuthAsyncThunk } from "./store/auth/usecases/get-auth.usecase";
-import { getMyOrganizationsUsecase } from "./store/organization/usecases/get-organizations.usecase";
+import { getMyOrganizationsUsecase } from "./store/organization/usecases/get-my-organizations.usecase";
+import { getOrganizationsUsecase } from "./store/organization/usecases/get-organizations.usecase";
 
 export const createRouter = ({ store }: { store: AppStore }) =>
   createBrowserRouter([
@@ -55,6 +56,9 @@ export const createRouter = ({ store }: { store: AppStore }) =>
         },
         {
           path: "/organizations/list",
+          loader: async () => {
+            await store.dispatch(getOrganizationsUsecase());
+          },
           element: <OrganizationsListPage />,
         },
         {

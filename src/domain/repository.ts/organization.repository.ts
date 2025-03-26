@@ -3,6 +3,7 @@ import { OrganizationApi } from "../../infrastructures/local-storage-organizatio
 export interface OrganizationRepository {
   create(params: CreateOrganizationParams): Promise<void>;
   getMyOrganizations(): Promise<OrganizationApi[]>;
+  getOrganizations(): Promise<OrganizationApi[]>;
 }
 
 export interface CreateOrganizationParams {

@@ -9,7 +9,8 @@ export interface OrganizationApi {
   name: string;
   members: { id: string }[];
   owner: string;
-  createdAt: string;
+  createdAt: number;
+  recruiting: boolean;
 }
 
 export class LocalStorageOrganizationRepository
@@ -28,6 +29,10 @@ export class LocalStorageOrganizationRepository
     );
   }
 
+  async getOrganizations(): Promise<OrganizationApi[]> {
+    return this.organizations;
+  }
+
   private addOrganization(organization: { id: string; name: string }) {
     const organizations: Map<string, OrganizationApi> = new Map(
       this.organizations.map((o) => [o.id, o]),
@@ -40,7 +45,8 @@ export class LocalStorageOrganizationRepository
       name: organization.name,
       members: [{ id: authUser.id }],
       owner: authUser.id,
-      createdAt: Date.now().toLocaleString(),
+      createdAt: Date.now(),
+      recruiting: true,
     });
 
     this.setOrganizations(Array.from(organizations.values()));
