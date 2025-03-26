@@ -1,4 +1,3 @@
-import { createSelector } from "@reduxjs/toolkit";
 import {
   selectNotMemberOrganizations,
   selectOwnOrganization,
@@ -69,19 +68,3 @@ export const getOrganizationsListPageViewModel = (
     },
   };
 };
-
-export const selectListOrganizationsViewModel = createSelector(
-  [selectNotMemberOrganizations],
-  (organizations) => {
-    return organizations.map((o) => {
-      const createdAt = new Date(o.createdAt);
-      return {
-        id: o.id,
-        name: o.name,
-        members: o.members.length,
-        recruiting: o.recruiting,
-        createdAt: `${MONTHS[createdAt.getMonth()]} ${createdAt.getFullYear()}`,
-      };
-    });
-  },
-);
