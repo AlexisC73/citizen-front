@@ -12,7 +12,7 @@ export default function Home() {
         <>
           <MyOrganizationCard organization={{ name: ownedOrganization.name }} />
           <Link to={"/organizations/list"} className="btn btn-link">
-            Search for new Oganization
+            Join a new Oganization
           </Link>
         </>
       ) : (

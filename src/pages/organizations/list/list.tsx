@@ -15,7 +15,7 @@ export default function OrganizationsListPage() {
   const { hasOwnOrganization, organizations } =
     getOrganizationsListPageViewModel(store.getState());
 
-  const OrganizationView = () => {
+  const ModelView = () => {
     switch (organizations.status) {
       case ListViewModelStatus.EMPTY_ORGANIZATIONS:
         return <p>No organizations found</p>;
@@ -39,7 +39,7 @@ export default function OrganizationsListPage() {
       <div hidden={hasOwnOrganization} className="p-8">
         <CreateOrganizationForm onSubmit={handleCreateOrganization} />
       </div>
-      <OrganizationView />
+      <ModelView />
     </div>
   );
 }
