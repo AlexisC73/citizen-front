@@ -1,4 +1,5 @@
 import {
+  CancelJoinOrganizationRequestParams,
   CreateJoinOrganizationRequestParams,
   CreateOrganizationParams,
   OrganizationRepository,
@@ -47,6 +48,23 @@ export class LocalStorageOrganizationRepository
     const user = this.getAuthUser()!;
     const { id } = this.addRequestToOrganization(organizationId, user.id);
     return { id };
+  }
+
+  async cancelJoinRequest({
+    joinRequestId,
+  }: CancelJoinOrganizationRequestParams): Promise<void> {
+    const newRequests = [...this.joinRequest];
+    const requestIndex = newRequests.findIndex((r) => r.id === joinRequestId);
+    if (requestIndex === -1) {
+      return;
+    }
+    newRequests.splice(requestIndex, 1);
+    this.setJoinRequests(newRequests);
+  }
+
+  async getMyJoinRequests(): Promise<JoinOrganizationRequestApi[]> {
+    const user = this.getAuthUser()!;
+    return this.joinRequest.filter((r) => r.userId === user.id);
   }
 
   private addRequestToOrganization(organizationId: string, userId: string) {

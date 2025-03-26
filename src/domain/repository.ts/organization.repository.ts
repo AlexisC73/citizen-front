@@ -1,4 +1,7 @@
-import { OrganizationApi } from "../../infrastructures/local-storage-organization.repository";
+import {
+  JoinOrganizationRequestApi,
+  OrganizationApi,
+} from "../../infrastructures/local-storage-organization.repository";
 
 export interface OrganizationRepository {
   create(params: CreateOrganizationParams): Promise<void>;
@@ -7,6 +10,10 @@ export interface OrganizationRepository {
   createJoinRequest({
     organizationId,
   }: CreateJoinOrganizationRequestParams): Promise<{ id: string }>;
+  cancelJoinRequest({
+    joinRequestId,
+  }: CancelJoinOrganizationRequestParams): Promise<void>;
+  getMyJoinRequests(): Promise<JoinOrganizationRequestApi[]>;
 }
 
 export interface CreateOrganizationParams {
@@ -15,4 +22,8 @@ export interface CreateOrganizationParams {
 
 export interface CreateJoinOrganizationRequestParams {
   organizationId: string;
+}
+
+export interface CancelJoinOrganizationRequestParams {
+  joinRequestId: string;
 }

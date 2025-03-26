@@ -12,6 +12,7 @@ import { AppStore } from "./store/store";
 import { getAuthAsyncThunk } from "./store/auth/usecases/get-auth.usecase";
 import { getMyOrganizationsUsecase } from "./store/organization/usecases/get-my-organizations.usecase";
 import { getOrganizationsUsecase } from "./store/organization/usecases/get-organizations.usecase";
+import { getOwnJoinRequests } from "./store/join-organization-request/usecase/get-own-join-request.usecase";
 
 export const createRouter = ({ store }: { store: AppStore }) =>
   createBrowserRouter([
@@ -58,6 +59,7 @@ export const createRouter = ({ store }: { store: AppStore }) =>
           path: "/organizations/list",
           loader: async () => {
             await store.dispatch(getOrganizationsUsecase());
+            await store.dispatch(getOwnJoinRequests());
           },
           element: <OrganizationsListPage />,
         },
